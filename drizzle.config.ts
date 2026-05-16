@@ -1,0 +1,12 @@
+import type { Config } from "drizzle-kit";
+
+const dbPath = process.env.ZEST_DB_PATH || "./data/db/zest.db";
+
+export default {
+    schema: "./src/db/schema.ts",
+    out: "./drizzle",
+    dialect: "sqlite",
+    dbCredentials: {
+        url: `file:${dbPath}`,
+    },
+} satisfies Config;
