@@ -1,6 +1,6 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const users = sqliteTable("zest_users", {
+export const users = sqliteTable("users", {
     id: integer("id").primaryKey({ autoIncrement: true }),
     username: text("username").notNull().unique(),
     email: text("email").notNull().unique(),
@@ -14,7 +14,7 @@ export const users = sqliteTable("zest_users", {
     updated_at: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()).notNull(),
 });
 
-export const sessions = sqliteTable("zest_sessions", {
+export const sessions = sqliteTable("sessions", {
     id: integer("id").primaryKey({ autoIncrement: true }),
     uid: integer("uid").notNull(),
     role: text("role", { enum: ["user", "admin"] }).notNull(),
@@ -27,7 +27,7 @@ export const sessions = sqliteTable("zest_sessions", {
     status: text("status", { enum: ["active", "expired", "revoked"] }).default("active").notNull(),
 });
 
-export const userSettings = sqliteTable("zest_user_settings", {
+export const userSettings = sqliteTable("user_settings", {
     id: integer("id").primaryKey({ autoIncrement: true }),
     uid: integer("uid").notNull().unique(),
     value: text("value").default("{}").notNull(),

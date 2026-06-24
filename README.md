@@ -41,9 +41,9 @@ Zest/
 
 默认只保留 3 张核心表：
 
-- `zest_users`
-- `zest_sessions`
-- `zest_user_settings`
+- `users`
+- `sessions`
+- `user_settings`
 
 ### 前端
 
@@ -88,12 +88,13 @@ ZEST_ALLOW_REGISTER=true
 ```bash
 bun install
 cd frontend && bun install
+bunx drizzle-kit push
 ```
 
 ### 2. 启动后端
 
 ```bash
-bun run dev
+bash run.sh dev
 ```
 
 默认监听 `3080`。

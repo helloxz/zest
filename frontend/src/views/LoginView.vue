@@ -67,7 +67,7 @@ const handleLogin = async () => {
             <NInput v-model:value="form.password" size="large" type="password" show-password-on="click" placeholder="请输入密码" @keyup.enter="handleLogin" />
           </div>
           <NButton type="primary" size="large" block :loading="loading" @click="handleLogin">登录</NButton>
-          <div class="text-center text-sm text-slate-500">
+          <div class="mt-4 text-center text-sm text-slate-500">
             需要新账号？
             <router-link to="/user/register" class="text-[#3b6ea8]">立即注册</router-link>
           </div>
