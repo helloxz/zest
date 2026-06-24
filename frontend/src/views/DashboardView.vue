@@ -2,6 +2,7 @@
 import { computed, h, onMounted, ref, shallowRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { NDropdown } from "naive-ui";
+import { useI18n } from "vue-i18n";
 import ZIcon from "@/components/DynamicIcon.vue";
 import { menuConfig } from "@/config/menu";
 import HomePanel from "@/components/dashboard/HomePanel.vue";
@@ -16,6 +17,7 @@ const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
 const siteStore = useSiteStore();
+const { t } = useI18n();
 
 const sidebarOpen = ref(false);
 const currentRoute = ref("/dashboard/home");
@@ -31,11 +33,11 @@ const componentMap: Record<string, any> = {
 
 const appName = computed(() => siteStore.appInfo.app_name || "Zest");
 
-const userMenuOptions = [
-    { label: "首页", key: "home", icon: () => h(ZIcon, { name: "ri:home-line", size: 16 }) },
-    { label: "个人中心", key: "profile", icon: () => h(ZIcon, { name: "ri:user-settings-line", size: 16 }) },
-    { label: "退出登录", key: "logout", icon: () => h(ZIcon, { name: "ri:logout-box-line", size: 16 }) },
-];
+const userMenuOptions = computed(() => [
+    { label: t("dashboard.user_menu.home"), key: "home", icon: () => h(ZIcon, { name: "ri:home-line", size: 16 }) },
+    { label: t("dashboard.user_menu.profile"), key: "profile", icon: () => h(ZIcon, { name: "ri:user-settings-line", size: 16 }) },
+    { label: t("dashboard.user_menu.logout"), key: "logout", icon: () => h(ZIcon, { name: "ri:logout-box-line", size: 16 }) },
+]);
 
 const navigateTo = async (path: string) => {
     currentRoute.value = path;
@@ -91,7 +93,7 @@ watch(() => route.params.name, (name) => {
           <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
             <ZIcon name="ri:user-smile-line" size="16" color="#fff" />
           </div>
-          <span class="text-sm text-white/80">{{ userStore.userInfo.username || '用户' }}</span>
+          <span class="text-sm text-white/80">{{ userStore.userInfo.username || t('dashboard.user.fallback') }}</span>
           <ZIcon name="ri:arrow-down-s-line" size="16" color="#ffffff99" />
         </div>
       </NDropdown>
@@ -113,7 +115,7 @@ watch(() => route.params.name, (name) => {
             @click="navigateTo(menu.route)"
           >
             <ZIcon :name="menu.icon" size="18" color="currentColor" />
-            <span>{{ menu.title }}</span>
+            <span>{{ t(menu.titleKey) }}</span>
           </button>
         </nav>
       </aside>

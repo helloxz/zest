@@ -2,10 +2,12 @@
 import { computed, onMounted } from "vue";
 import { NButton, NCard, NSpace, NTag } from "naive-ui";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { useSystemStore } from "@/stores/system";
 
 const router = useRouter();
 const systemStore = useSystemStore();
+const { t } = useI18n();
 
 const status = computed(() => systemStore.status);
 
@@ -22,38 +24,38 @@ onMounted(() => {
           <NTag type="info" size="small" round>Zest Web Starter</NTag>
           <div class="space-y-4">
             <h1 class="max-w-3xl text-4xl font-semibold tracking-[-0.03em] text-slate-950 sm:text-5xl">
-              一个保留登录、权限和后台壳的通用 Web 项目启动框架。
+              {{ t("home.title") }}
             </h1>
             <p class="max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-              你可以直接基于 Zest 开始业务开发，把用户体系、后台框架、Docker 启动和 SQLite 持久化作为默认底座。
+              {{ t("home.description") }}
             </p>
           </div>
           <NSpace>
             <NButton type="primary" size="large" @click="router.push(status.initialized ? '/user/login' : '/user/init')">
-              {{ status.initialized ? '进入登录' : '初始化系统' }}
+              {{ status.initialized ? t('home.goto_login') : t('home.init_system') }}
             </NButton>
-            <NButton size="large" @click="router.push('/dashboard/home')">进入后台</NButton>
+            <NButton size="large" @click="router.push('/dashboard/home')">{{ t("home.goto_dashboard") }}</NButton>
           </NSpace>
         </section>
 
         <NCard :bordered="false" class="rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
           <div class="space-y-5">
             <div>
-              <div class="text-sm text-slate-500">框架状态</div>
+              <div class="text-sm text-slate-500">{{ t("home.framework_status") }}</div>
               <div class="mt-2 text-2xl font-semibold text-slate-900">{{ status.app_name }}</div>
             </div>
             <div class="grid gap-3 sm:grid-cols-2">
               <div class="rounded-2xl bg-slate-50 p-4">
-                <div class="text-xs text-slate-500">系统初始化</div>
-                <div class="mt-2 text-lg font-semibold">{{ status.initialized ? '已完成' : '未初始化' }}</div>
+                <div class="text-xs text-slate-500">{{ t("home.sys_init") }}</div>
+                <div class="mt-2 text-lg font-semibold">{{ status.initialized ? t('home.sys_init.completed') : t('home.sys_init.not_init') }}</div>
               </div>
               <div class="rounded-2xl bg-slate-50 p-4">
-                <div class="text-xs text-slate-500">用户注册</div>
-                <div class="mt-2 text-lg font-semibold">{{ status.allow_register ? '已开启' : '已关闭' }}</div>
+                <div class="text-xs text-slate-500">{{ t("home.user_register") }}</div>
+                <div class="mt-2 text-lg font-semibold">{{ status.allow_register ? t('home.user_register.enabled') : t('home.user_register.disabled') }}</div>
               </div>
             </div>
             <div class="rounded-2xl border border-dashed border-slate-200 p-4 text-sm leading-6 text-slate-600">
-              默认保留：Bun + Hono、SQLite + Drizzle、登录注册、后台壳、Docker、启动脚本。
+              {{ t("home.default_features") }}
             </div>
           </div>
         </NCard>

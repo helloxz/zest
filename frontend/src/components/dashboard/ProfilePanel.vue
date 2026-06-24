@@ -53,12 +53,12 @@ const handleSubmit = async () => {
       <NCard :bordered="false" class="rounded-3xl">
         <div class="space-y-4">
           <div>
-            <div class="text-sm text-slate-500">当前用户</div>
+            <div class="text-sm text-slate-500">{{ t("panel.profile.current_user") }}</div>
             <div class="mt-2 text-2xl font-semibold text-slate-900">{{ userStore.userInfo.username || '-' }}</div>
           </div>
           <div class="rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-            邮箱：{{ userStore.userInfo.email || '-' }}<br />
-            角色：{{ userStore.userInfo.role || '-' }}
+            {{ t("panel.profile.email") }}：{{ userStore.userInfo.email || '-' }}<br />
+            {{ t("panel.profile.role") }}：{{ userStore.userInfo.role || '-' }}
           </div>
         </div>
       </NCard>
@@ -66,22 +66,22 @@ const handleSubmit = async () => {
       <NCard :bordered="false" class="rounded-3xl">
         <div class="space-y-5">
           <div>
-            <h2 class="text-xl font-semibold text-slate-900">修改密码</h2>
-            <p class="mt-1 text-sm text-slate-500">这是框架默认保留的个人中心能力。</p>
+            <h2 class="text-xl font-semibold text-slate-900">{{ t("panel.profile.change_password") }}</h2>
+            <p class="mt-1 text-sm text-slate-500">{{ t("panel.profile.change_password.description") }}</p>
           </div>
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-700">旧密码</label>
+            <label class="mb-2 block text-sm font-medium text-slate-700">{{ t("panel.profile.old_password") }}</label>
             <NInput v-model:value="form.old_password" type="password" show-password-on="click" />
           </div>
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-700">新密码</label>
+            <label class="mb-2 block text-sm font-medium text-slate-700">{{ t("panel.profile.new_password") }}</label>
             <NInput v-model:value="form.new_password" type="password" show-password-on="click" />
           </div>
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-700">重复新密码</label>
+            <label class="mb-2 block text-sm font-medium text-slate-700">{{ t("panel.profile.repeat_new_password") }}</label>
             <NInput v-model:value="form.repeat_password" type="password" show-password-on="click" />
           </div>
-          <NButton type="primary" :loading="submitting" @click="handleSubmit">保存新密码</NButton>
+          <NButton type="primary" :loading="submitting" @click="handleSubmit">{{ t("panel.profile.save_password") }}</NButton>
         </div>
       </NCard>
     </div>

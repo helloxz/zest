@@ -53,24 +53,24 @@ const handleInit = async () => {
   <div class="flex min-h-screen items-center justify-center px-6 py-10">
     <div class="w-full max-w-[400px]">
       <div class="mb-6 text-center">
-        <div class="text-[30px] font-semibold tracking-[-0.02em] text-slate-900">初始化管理员</div>
-        <p class="mt-2 text-sm leading-6 text-slate-500">首次启动时创建系统管理员账号。</p>
+        <div class="text-[30px] font-semibold tracking-[-0.02em] text-slate-900">{{ t("init.title") }}</div>
+        <p class="mt-2 text-sm leading-6 text-slate-500">{{ t("init.description") }}</p>
       </div>
       <NCard :bordered="false" class="rounded-3xl shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
         <div class="space-y-5">
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-700">用户名</label>
-            <NInput v-model:value="form.username" size="large" placeholder="请输入用户名" @keyup.enter="handleInit" />
+            <label class="mb-2 block text-sm font-medium text-slate-700">{{ t("register.username") }}</label>
+            <NInput v-model:value="form.username" size="large" :placeholder="t('register.username.placeholder')" @keyup.enter="handleInit" />
           </div>
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-700">邮箱</label>
-            <NInput v-model:value="form.email" size="large" placeholder="请输入邮箱" @keyup.enter="handleInit" />
+            <label class="mb-2 block text-sm font-medium text-slate-700">{{ t("register.email") }}</label>
+            <NInput v-model:value="form.email" size="large" :placeholder="t('register.email.placeholder')" @keyup.enter="handleInit" />
           </div>
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-700">密码</label>
-            <NInput v-model:value="form.password" size="large" type="password" show-password-on="click" placeholder="请输入密码" @keyup.enter="handleInit" />
+            <label class="mb-2 block text-sm font-medium text-slate-700">{{ t("login.password") }}</label>
+            <NInput v-model:value="form.password" size="large" type="password" show-password-on="click" :placeholder="t('register.password.placeholder')" @keyup.enter="handleInit" />
           </div>
-          <NButton type="primary" size="large" block :loading="loading" @click="handleInit">初始化系统</NButton>
+          <NButton type="primary" size="large" block :loading="loading" @click="handleInit">{{ t("init.submit") }}</NButton>
         </div>
       </NCard>
     </div>

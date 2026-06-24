@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { RouterView } from "vue-router";
-import { NConfigProvider, NDialogProvider, NLoadingBarProvider, NMessageProvider, dateZhCN, zhCN } from "naive-ui";
+import { NConfigProvider, NDialogProvider, NLoadingBarProvider, NMessageProvider, dateEnUS, dateZhCN, enUS, zhCN } from "naive-ui";
 import type { GlobalThemeOverrides } from "naive-ui";
+import { useI18n } from "vue-i18n";
+
+const { locale } = useI18n();
+const naiveLocale = computed(() => (locale.value === "zh" ? zhCN : enUS));
+const naiveDateLocale = computed(() => (locale.value === "zh" ? dateZhCN : dateEnUS));
 
 const themeOverrides: GlobalThemeOverrides = {
     common: {
@@ -14,7 +20,7 @@ const themeOverrides: GlobalThemeOverrides = {
 </script>
 
 <template>
-  <NConfigProvider :locale="zhCN" :date-locale="dateZhCN" :theme-overrides="themeOverrides">
+  <NConfigProvider :locale="naiveLocale" :date-locale="naiveDateLocale" :theme-overrides="themeOverrides">
     <NLoadingBarProvider>
       <NDialogProvider>
         <NMessageProvider>

@@ -23,7 +23,7 @@ const handleLogin = async () => {
     const username = form.username.trim();
     const password = form.password.trim();
     if (!username || !password) {
-        message.error("请输入用户名和密码");
+        message.error(t("login.username_password.required"));
         return;
     }
 
@@ -53,23 +53,23 @@ const handleLogin = async () => {
   <div class="flex min-h-screen items-center justify-center px-6 py-10">
     <div class="w-full max-w-[400px]">
       <div class="mb-6 text-center">
-        <div class="text-[30px] font-semibold tracking-[-0.02em] text-slate-900">欢迎登录</div>
-        <p class="mt-2 text-sm leading-6 text-slate-500">使用你的账号进入后台框架。</p>
+        <div class="text-[30px] font-semibold tracking-[-0.02em] text-slate-900">{{ t("login.welcome") }}</div>
+        <p class="mt-2 text-sm leading-6 text-slate-500">{{ t("login.description") }}</p>
       </div>
       <NCard :bordered="false" class="rounded-3xl shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
         <div class="space-y-5">
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-700">邮箱 / 用户名</label>
-            <NInput v-model:value="form.username" size="large" placeholder="请输入邮箱或用户名" @keyup.enter="handleLogin" />
+            <label class="mb-2 block text-sm font-medium text-slate-700">{{ t("login.email_or_username") }}</label>
+            <NInput v-model:value="form.username" size="large" :placeholder="t('login.email_or_username.placeholder')" @keyup.enter="handleLogin" />
           </div>
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-700">密码</label>
-            <NInput v-model:value="form.password" size="large" type="password" show-password-on="click" placeholder="请输入密码" @keyup.enter="handleLogin" />
+            <label class="mb-2 block text-sm font-medium text-slate-700">{{ t("login.password") }}</label>
+            <NInput v-model:value="form.password" size="large" type="password" show-password-on="click" :placeholder="t('login.password.placeholder')" @keyup.enter="handleLogin" />
           </div>
-          <NButton type="primary" size="large" block :loading="loading" @click="handleLogin">登录</NButton>
+          <NButton type="primary" size="large" block :loading="loading" @click="handleLogin">{{ t("login.submit") }}</NButton>
           <div class="mt-4 text-center text-sm text-slate-500">
-            需要新账号？
-            <router-link to="/user/register" class="text-[#3b6ea8]">立即注册</router-link>
+            {{ t("login.no_account") }}
+            <router-link to="/user/register" class="text-[#3b6ea8]">{{ t("login.register_now") }}</router-link>
           </div>
         </div>
       </NCard>

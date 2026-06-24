@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { h, onMounted, ref } from "vue";
 import { NButton, NCard, NDataTable, useMessage } from "naive-ui";
+import { useI18n } from "vue-i18n";
 import req from "@/utils/req";
 
 const message = useMessage();
+const { t } = useI18n();
 const rows = ref<any[]>([]);
 const loading = ref(false);
 
@@ -22,28 +24,28 @@ const fetchUsers = async () => {
 const resetPassword = async (id: number) => {
     const res = await req.post("/api/admin/reset_user_password", { id });
     if (res.data?.code !== 200) {
-        message.error(res.data?.msg || "重置失败");
+        message.error(res.data?.msg || t("panel.users.reset_failed"));
         return;
     }
-    message.success(`新密码：${res.data.data.password}`);
+    message.success(t("panel.users.new_password", { password: res.data.data.password }));
 };
 
 const columns = [
-    { title: "ID", key: "id", width: 80 },
-    { title: "用户名", key: "username" },
-    { title: "邮箱", key: "email" },
-    { title: "角色", key: "role", width: 100 },
-    { title: "状态", key: "status", width: 100 },
-    { title: "注册 IP", key: "reg_ip" },
+    { title: t("panel.users.col.id"), key: "id", width: 80 },
+    { title: t("panel.users.col.username"), key: "username" },
+    { title: t("panel.users.col.email"), key: "email" },
+    { title: t("panel.users.col.role"), key: "role", width: 100 },
+    { title: t("panel.users.col.status"), key: "status", width: 100 },
+    { title: t("panel.users.col.reg_ip"), key: "reg_ip" },
     {
-        title: "操作",
+        title: t("panel.users.col.actions"),
         key: "actions",
         width: 160,
         render: (row: any) => row.role === "user"
             ? h(
                 NButton,
                 { size: "small", onClick: () => resetPassword(row.id) },
-                { default: () => "重置密码" },
+                { default: () => t("panel.users.reset_password") },
             )
             : "-",
     },
@@ -59,10 +61,10 @@ onMounted(() => {
     <NCard :bordered="false" class="rounded-3xl">
       <div class="mb-4 flex items-center justify-between">
         <div>
-          <h2 class="text-xl font-semibold text-slate-900">用户管理</h2>
-          <p class="mt-1 text-sm text-slate-500">框架默认保留基础用户列表和密码重置能力。</p>
+          <h2 class="text-xl font-semibold text-slate-900">{{ t("panel.users.title") }}</h2>
+          <p class="mt-1 text-sm text-slate-500">{{ t("panel.users.description") }}</p>
         </div>
-        <NButton @click="fetchUsers">刷新</NButton>
+        <NButton @click="fetchUsers">{{ t("panel.users.refresh") }}</NButton>
       </div>
       <NDataTable :columns="columns" :data="rows" :loading="loading" />
     </NCard>

@@ -1,31 +1,31 @@
 export const menuConfig = [
     {
         id: "home",
-        title: "概览",
+        titleKey: "dashboard.home",
         icon: "ri:dashboard-line",
         route: "/dashboard/home",
     },
     {
         id: "users",
-        title: "用户管理",
+        titleKey: "dashboard.users",
         icon: "ri:user-line",
         route: "/dashboard/users",
     },
     {
         id: "templates",
-        title: "业务模板",
+        titleKey: "dashboard.templates",
         icon: "ri:layout-4-line",
         route: "/dashboard/templates",
     },
     {
         id: "settings",
-        title: "系统模板",
+        titleKey: "dashboard.settings",
         icon: "ri:settings-3-line",
         route: "/dashboard/settings",
     },
     {
         id: "profile",
-        title: "个人中心",
+        titleKey: "dashboard.profile",
         icon: "ri:user-settings-line",
         route: "/dashboard/profile",
     },
