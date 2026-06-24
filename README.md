@@ -73,7 +73,6 @@ ZEST_DB_PATH=./data/db/zest.db
 ZEST_SALT=zest
 ZEST_CORS_ORIGIN=*
 ZEST_ALLOW_REGISTER=true
-VITE_API_URL=http://127.0.0.1:3080
 ```
 
 说明：
@@ -81,7 +80,6 @@ VITE_API_URL=http://127.0.0.1:3080
 - `ZEST_SALT`：密码加密盐，默认回退为 `zest`
 - `ZEST_CORS_ORIGIN`：CORS 允许来源，支持 `*` 或逗号分隔的多个域名
 - `ZEST_ALLOW_REGISTER`：是否允许公开注册
-- `VITE_API_URL`：前端请求后端的地址
 
 ## 本地开发
 
