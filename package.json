@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "output": "bun build ./src/index.ts --outdir ./dist --target bun --bundle --external drizzle-orm --external drizzle-kit",
+    "dev": "bun run --hot backend/index.ts",
+    "output": "bun build ./backend/index.ts --outdir ./dist --target bun --bundle --external drizzle-orm --external drizzle-kit",
     "build": "sh build_frontend.sh",
     "db:push": "bunx drizzle-kit push",
     "db:generate": "bunx drizzle-kit generate",
