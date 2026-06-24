@@ -70,14 +70,12 @@ cp .env.example .env
 ZEST_APP_NAME=Zest
 ZEST_PORT=3080
 ZEST_DB_PATH=./data/db/zest.db
-ZEST_SALT=zest
 ZEST_CORS_ORIGIN=*
 ZEST_ALLOW_REGISTER=true
 ```
 
 说明：
 
-- `ZEST_SALT`：密码加密盐，默认回退为 `zest`
 - `ZEST_CORS_ORIGIN`：CORS 允许来源，支持 `*` 或逗号分隔的多个域名
 - `ZEST_ALLOW_REGISTER`：是否允许公开注册
 

@@ -36,8 +36,7 @@ export const getClientIp = (c: Context): string => {
 };
 
 export const enPassword = (username: string, password: string): string => {
-    const salt = Bun.env.ZEST_SALT || "zest";
-    return pbkdf2Sync(password, `${username}-${salt}`, 100000, 32, "sha512").toString("hex");
+    return pbkdf2Sync(password, username, 100000, 32, "sha512").toString("hex");
 };
 
 export const randomString = (length = 16): string => {
