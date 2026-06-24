@@ -134,3 +134,32 @@ frontend/
 | publicRouter | `/` | 无 |
 | userRouter | `/api/user` | Bearer Token (user/admin) |
 | adminRouter | `/api/admin` | Bearer Token (admin only) |
+
+---
+
+## 多语言开发说明
+
+- **库**: vue-i18n v12，支持中文 (`zh`)、英文 (`en`)
+- **语言检测**: 自动检测浏览器语言，`zh` 开头使用中文，否则英文
+- **初始化文件**: `frontend/src/i18n/index.ts`
+
+| 语言 | 文件路径 |
+|------|----------|
+| 中文 | `frontend/src/i18n/locales/zh.ts` |
+| 英文 | `frontend/src/i18n/locales/en.ts` |
+
+**组件中使用**:
+
+```vue
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+</script>
+
+<template>
+  <p>{{ t("login.welcome") }}</p>
+  <NInput :placeholder="t('login.email_or_username.placeholder')" />
+</template>
+```
+
+**添加翻译**: 在 `zh.ts` 和 `en.ts` 中添加相同 key，命名格式 `模块.功能.描述`（如 `login.welcome`、`panel.users.title`）。
