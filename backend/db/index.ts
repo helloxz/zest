@@ -1,4 +1,5 @@
 import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 import { dirname } from "node:path";
 import { existsSync, mkdirSync } from "node:fs";
 import * as schema from "./schema";
@@ -10,9 +11,10 @@ if (!existsSync(dbDir)) {
     mkdirSync(dbDir, { recursive: true });
 }
 
-export const db = drizzle({
-    connection: {
-        url: `file:${dbFile}`,
-    },
-    schema,
+const client = createClient({
+    url: `file:${dbFile}`,
 });
+
+await client.execute("PRAGMA journal_mode = WAL");
+
+export const db = drizzle({ client, schema });
