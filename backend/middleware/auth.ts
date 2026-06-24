@@ -14,7 +14,7 @@ export const verifyApiToken = async (
     }
 
     try {
-        const session = db
+        const session = await db
             .select()
             .from(schema.sessions)
             .where(and(eq(schema.sessions.token, token), eq(schema.sessions.status, "active")))
@@ -25,7 +25,7 @@ export const verifyApiToken = async (
         }
 
         if (session.expires_at.getTime() <= Date.now()) {
-            db.update(schema.sessions)
+            await db.update(schema.sessions)
                 .set({ status: "expired" })
                 .where(eq(schema.sessions.id, session.id))
                 .run();
@@ -36,7 +36,7 @@ export const verifyApiToken = async (
             return false;
         }
 
-        const user = db
+        const user = await db
             .select({
                 id: schema.users.id,
                 username: schema.users.username,

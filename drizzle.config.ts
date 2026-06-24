@@ -5,7 +5,7 @@ const dbPath = process.env.ZEST_DB_PATH || "./data/db/zest.db";
 export default {
     schema: "./backend/db/schema.ts",
     out: "./drizzle",
-    dialect: "sqlite",
+    dialect: "turso",
     dbCredentials: {
         url: `file:${dbPath}`,
     },

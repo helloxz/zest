@@ -3,7 +3,7 @@
 `Zest` 是从当前项目抽取出的一个通用 Web 启动框架，保留了后续项目最常用的核心能力：
 
 - `Bun + Hono` 后端
-- `SQLite + Drizzle ORM` 数据库
+- `libsql + Drizzle ORM` 数据库
 - 用户初始化、登录、注册、登出、修改密码
 - `public / user / admin` 三段式路由设计
 - Vue 3 后台管理壳
@@ -18,7 +18,7 @@ Zest/
 ├─ src/                  # Bun + Hono 后端
 ├─ frontend/             # Vue 3 + Vite 前端
 ├─ public/               # 前端构建产物目录
-├─ data/                 # SQLite 和运行时数据
+├─ data/                 # libsql 和运行时数据
 ├─ build_frontend.sh     # 构建前端并打包后端
 ├─ run.sh                # 统一启动脚本
 ├─ Dockerfile            # Docker 镜像构建
@@ -208,4 +208,42 @@ docker compose -f compose.yaml down
 ```bash
 bun run db:generate
 bun run db:migrate
+```
+
+## 数据库说明
+
+本项目使用 `libsql`（SQLite 的分支）作为数据库，通过 `Drizzle ORM` 进行操作。
+
+### 为什么选择 libsql？
+
+1. **原生向量支持**：libsql 内置向量数据库功能，支持多种向量类型和距离计算
+2. **云数据库支持**：Turso 提供托管的 libsql 云数据库，方便后续扩展
+3. **同步功能**：支持本地数据库与云端同步（embedded replicas）
+4. **SQLite 兼容**：libsql 是 SQLite 的 fork，大部分功能兼容
+
+### 本地开发
+
+本地开发时，libsql 以文件形式存储数据（与 SQLite 相同），无需额外配置。
+
+### 连接云端
+
+如需连接 Turso 云数据库，修改 `backend/db/index.ts`：
+
+```typescript
+import { drizzle } from "drizzle-orm/libsql";
+
+export const db = drizzle({
+    connection: {
+        url: process.env.TURSO_DATABASE_URL!,
+        authToken: process.env.TURSO_AUTH_TOKEN,
+    },
+    schema,
+});
+```
+
+并在 `.env` 中添加：
+
+```env
+TURSO_DATABASE_URL=libsql://[database-name]-[organization].turso.io
+TURSO_AUTH_TOKEN=your-auth-token
 ```

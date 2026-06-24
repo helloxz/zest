@@ -13,11 +13,11 @@ const getRequestUserAgent = (c: Context) => {
     return userAgent.length > 256 ? userAgent.slice(0, 256) : userAgent;
 };
 
-const createSession = (uid: number, role: "admin" | "user", c: Context) => {
+const createSession = async (uid: number, role: "admin" | "user", c: Context) => {
     const token = `web-${randomString(28)}`;
     const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
 
-    db.insert(schema.sessions)
+    await db.insert(schema.sessions)
         .values({
             uid,
             role,
@@ -32,7 +32,7 @@ const createSession = (uid: number, role: "admin" | "user", c: Context) => {
 };
 
 export const initUser = async (c: Context) => {
-    if (checkSystemInitialized()) {
+    if (await checkSystemInitialized()) {
         return c.json({ code: -1000, msg: "already.initialized", data: null });
     }
 
@@ -52,7 +52,7 @@ export const initUser = async (c: Context) => {
         return c.json({ code: -1000, msg: "invalid.password", data: null });
     }
 
-    db.insert(schema.users)
+    await db.insert(schema.users)
         .values({
             username,
             email,
@@ -86,7 +86,7 @@ export const register = async (c: Context) => {
         return c.json({ code: -1000, msg: "invalid.password", data: null });
     }
 
-    const existingUsername = db
+    const existingUsername = await db
         .select({ id: schema.users.id })
         .from(schema.users)
         .where(eq(schema.users.username, username))
@@ -95,7 +95,7 @@ export const register = async (c: Context) => {
         return c.json({ code: -1000, msg: "username.already.exists", data: null });
     }
 
-    const existingEmail = db
+    const existingEmail = await db
         .select({ id: schema.users.id })
         .from(schema.users)
         .where(eq(schema.users.email, email))
@@ -118,7 +118,7 @@ export const register = async (c: Context) => {
         role: schema.users.role,
     });
 
-    const token = createSession(user.id, user.role, c);
+    const token = await createSession(user.id, user.role, c);
 
     return c.json({
         code: 200,
@@ -145,7 +145,7 @@ export const login = async (c: Context) => {
         if (!vEmail(username)) {
             return c.json({ code: -1000, msg: "invalid.email", data: null });
         }
-        const userByEmail = db
+        const userByEmail = await db
             .select({ username: schema.users.username })
             .from(schema.users)
             .where(eq(schema.users.email, username))
@@ -159,7 +159,7 @@ export const login = async (c: Context) => {
     }
 
     const encryptedPassword = enPassword(actualUsername, password);
-    const user = db
+    const user = await db
         .select({
             id: schema.users.id,
             username: schema.users.username,
@@ -180,8 +180,8 @@ export const login = async (c: Context) => {
         return c.json({ code: -1000, msg: "invalid.username.or.password", data: null });
     }
 
-    const token = createSession(user.id, user.role, c);
-    const userSettings = getUserSettingValue(user.id);
+    const token = await createSession(user.id, user.role, c);
+    const userSettings = await getUserSettingValue(user.id);
     const redirect = userSettings.dashboard_home === "templates" ? "/dashboard/templates" : "/dashboard/home";
 
     return c.json({
@@ -197,7 +197,7 @@ export const login = async (c: Context) => {
 
 export const userInfo = async (c: Context) => {
     const uid = Number(c.get("uid"));
-    const user = db
+    const user = await db
         .select({
             id: schema.users.id,
             username: schema.users.username,
@@ -219,7 +219,7 @@ export const userInfo = async (c: Context) => {
 export const logout = async (c: Context) => {
     const token = c.get("token") || getBearerToken(c);
     if (token) {
-        db.update(schema.sessions)
+        await db.update(schema.sessions)
             .set({ status: "revoked" })
             .where(and(eq(schema.sessions.token, token), eq(schema.sessions.status, "active")))
             .run();
@@ -245,7 +245,7 @@ export const changePassword = async (c: Context) => {
         return c.json({ code: -1000, msg: "user.password.repeat.not_match", data: null });
     }
 
-    const user = db
+    const user = await db
         .select({ id: schema.users.id })
         .from(schema.users)
         .where(
@@ -261,7 +261,7 @@ export const changePassword = async (c: Context) => {
         return c.json({ code: -1000, msg: "user.old_password.invalid", data: null });
     }
 
-    db.update(schema.users)
+    await db.update(schema.users)
         .set({ password: enPassword(username, new_password), updated_at: new Date() })
         .where(eq(schema.users.id, uid))
         .run();
@@ -274,7 +274,7 @@ export const checkLogin = async (c: Context) => {
 };
 
 export const listUsers = async (c: Context) => {
-    const users = db.select({
+    const users = await db.select({
         id: schema.users.id,
         username: schema.users.username,
         email: schema.users.email,
@@ -293,7 +293,7 @@ export const resetUserPassword = async (c: Context) => {
         return c.json({ code: -1000, msg: "user.id.invalid", data: null });
     }
 
-    const user = db
+    const user = await db
         .select({ id: schema.users.id, username: schema.users.username, role: schema.users.role })
         .from(schema.users)
         .where(eq(schema.users.id, id))
@@ -308,7 +308,7 @@ export const resetUserPassword = async (c: Context) => {
     }
 
     const newPassword = randomString(10);
-    db.update(schema.users)
+    await db.update(schema.users)
         .set({ password: enPassword(user.username, newPassword), updated_at: new Date() })
         .where(eq(schema.users.id, user.id))
         .run();
@@ -321,7 +321,7 @@ export const resetUserPassword = async (c: Context) => {
 };
 
 export const resetAdminPassword = async (c: Context) => {
-    const admin = db
+    const admin = await db
         .select({ id: schema.users.id, username: schema.users.username })
         .from(schema.users)
         .where(eq(schema.users.role, "admin"))
@@ -340,7 +340,7 @@ export const resetAdminPassword = async (c: Context) => {
     }
 
     const password = randomString(12);
-    db.update(schema.users)
+    await db.update(schema.users)
         .set({ password: enPassword(admin.username, password), updated_at: new Date() })
         .where(eq(schema.users.id, admin.id))
         .run();

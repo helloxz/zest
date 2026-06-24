@@ -8,8 +8,8 @@ const DEFAULT_USER_SETTINGS = {
     dashboard_layout: "default",
 };
 
-export const getUserSettingValue = (uid: number) => {
-    const row = db
+export const getUserSettingValue = async (uid: number) => {
+    const row = await db
         .select({ value: schema.userSettings.value })
         .from(schema.userSettings)
         .where(eq(schema.userSettings.uid, uid))
@@ -34,7 +34,7 @@ export const getUserSetting = async (c: Context) => {
     return c.json({
         code: 200,
         msg: "success",
-        data: getUserSettingValue(uid),
+        data: await getUserSettingValue(uid),
     });
 };
 
@@ -46,19 +46,19 @@ export const setUserSetting = async (c: Context) => {
         ...(payload || {}),
     });
 
-    const existing = db
+    const existing = await db
         .select({ id: schema.userSettings.id })
         .from(schema.userSettings)
         .where(eq(schema.userSettings.uid, uid))
         .get();
 
     if (existing) {
-        db.update(schema.userSettings)
+        await db.update(schema.userSettings)
             .set({ value, updated_at: new Date() })
             .where(eq(schema.userSettings.uid, uid))
             .run();
     } else {
-        db.insert(schema.userSettings)
+        await db.insert(schema.userSettings)
             .values({ uid, value })
             .run();
     }
